@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabel</title>
+</head>
+<body>
+    <form enctype="multipart/form-data" method="get">
+        {% csrf_token %}
+        <select name="client">
+            <option>Все</option>
+            {% for client in clients %}
+            <option value="{{ client.name }}">{{ client.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="equipment">
+            <option>Все</option>
+            {% for equipment in equipments %}
+            <option value="{{ equipment.name }}">{{ equipment.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="mode">
+            <option>Все</option>
+            {% for mode in modes %}
+            <option value="{{ mode.name }}">{{ mode.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="date" name="start_date" placeholder="Enter start date">
+        <input type="time" name="start_time" placeholder="Enter start time">
+        <input type="date" name="end_date" placeholder="Enter end date">
+        <input type="time" name="end_time" placeholder="Enter end time">
+        <input type="number" name="duration" placeholder="Enter duration">
+        <button type="submit">Show</button>
+    </form>
+    {% if durations %}
+    <table border="1">
+        <caption>Durations</caption>
+        <tr>
+            <th>Client</th>
+            <th>Equipment</th>
+            <th>Start</th>
+            <th>Stop</th>
+            <th>Mode</th>
+            <th>Minutes</th>
+        </tr>
+        {% for duration in durations %}
+        <tr>
+            <td>{{ duration.client.name }}</td>
+            <td>{{ duration.equipment.name }}</td>
+            <td>{{ duration.start }}</td>
+            <td>{{ duration.stop }}</td>
+            <td>{{ duration.mode.name }}</td>
+            <td>{{ duration.minutes }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
