@@ -18,6 +18,8 @@ from django.urls import path, include
 
 from .views import TableView
 
+app_name = 'tabel'
+
 urlpatterns = [
     path('', TableView.as_view(), name='table-view'),
 ]
