@@ -1,12 +1,12 @@
 from typing import List
 
-from sqlalchemy import create_engine, String, Column, Integer, DateTime, Float, ForeignKey
+from sqlalchemy import create_engine, String, Column, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, Query
+from sqlalchemy.orm import sessionmaker
 
 import pandas as pd
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 
 ENERGY_CSV_FILEPATH = './energy.csv'
 OPERATORS_CSV_FILEPATH = './operators.csv'
@@ -161,11 +161,6 @@ class PeriodView(Base):
                     mode_start=last_time_energy,
                     mode_end=energy.event_time,
                     mode_duration=duration[0].seconds // 60,
-                    # label=periods.filter(
-                    #     Periods.mode_start <= energy.event_time
-                    # ).filter(
-                    #     Periods.mode_start + timedelta(0, Periods.mode_duration*60) >= energy.event_time
-                    # ).first().label,
                     operator_name=operator.operator_name if operator else '',
                     energy_sum=sum_energy_per_period,
                 ))
@@ -188,19 +183,19 @@ if __name__ == '__main__':
     energys_list = Energy.create_energy_from_csv(ENERGY_CSV_FILEPATH)
     logging.info('Energy created {}'.format(len(energys_list)))
 
-    # session.add_all(reasons_list)
-    # logging.info('Reasons add')
-    # session.add_all(operators_list)
-    # logging.info('Operators add')
-    # session.add_all(periods_list)
-    # logging.info('Periods add')
-    # session.add_all(energys_list)
-    # logging.info('Energy add')
+    session.add_all(reasons_list)
+    logging.info('Reasons add')
+    session.add_all(operators_list)
+    logging.info('Operators add')
+    session.add_all(periods_list)
+    logging.info('Periods add')
+    session.add_all(energys_list)
+    logging.info('Energy add')
 
-    # Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
-    #
-    # session.commit()
+
+    session.commit()
 
     period_views = PeriodView.create_periodviews(reasons_list, operators_list, periods_list, energys_list)
     logging.info('Periods view created {}'.format(periods_list))
